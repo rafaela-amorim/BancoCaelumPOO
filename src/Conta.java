@@ -15,16 +15,16 @@ public class Conta {
 	// Construtor
 	
 	public Conta() {
-		this.saldo = 0;
 		dataAbertura = getDateTime();
+		
+		// valores default
+		titular = "Cliente";
+		numero = 123;
+		saldo = 0;
 	}
 	
 	// Métodos
-	
-	public void saca(double valorDeSaque) {
-		saldo -= valorDeSaque;
-	}
-	
+
 	public void deposita(double valorDeposito) {
 		saldo += valorDeposito;
 	}
@@ -33,16 +33,26 @@ public class Conta {
 		return saldo * 0.1;
 	}
 	
-	public void setTitular(String titular) {
-		this.titular = titular;
+	public boolean saca(double quantidade) {
+		boolean retorno = true;
+		
+		if (quantidade <= this.saldo) {
+			saldo -= quantidade;
+		} else {
+			retorno = false;
+		}
+		
+		return retorno;
 	}
 	
-	public String getDataAbertura() {
-		return dataAbertura;
-	}
-	
-	public String getTitular() {
-		return titular;
+	public boolean transferePara(Conta destino, double quantia) {
+		boolean retorno = this.saca(quantia);
+		
+		if (retorno) {
+			destino.deposita(quantia);
+		}
+		
+		return retorno;
 	}
 	
 	@Override
@@ -59,5 +69,23 @@ public class Conta {
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"); 
 		Date date = new Date(); 
 		return dateFormat.format(date); 
+	}
+	
+	// Getters & Setters
+	
+	public void setTitular(String titular) {
+		this.titular = titular;
+	}
+	
+	public String getDataAbertura() {
+		return dataAbertura;
+	}
+	
+	public String getTitular() {
+		return titular;
+	}
+	
+	public double getSaldo() {
+		return saldo;
 	}
 }
